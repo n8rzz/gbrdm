@@ -1,5 +1,5 @@
 {
-  "name": "gbdm",
+  "name": "git-branch-delete-multiple",
   "version": "1.0.0",
   "description": "Delete multiple git branches via a single interface",
   "main": "index.js",
@@ -14,6 +14,9 @@
     "cli"
   ],
   "author": "Nate Geslin, teamtomkins23@gmail.com",
+  "repository": {
+    "url": "https://github.com/n8rzz/gbdm"
+  },
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.3.0",
