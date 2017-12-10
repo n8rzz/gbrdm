@@ -1,18 +1,17 @@
 {
-  "name": "gbrdm",
+  "name": "gbdm",
   "version": "1.0.0",
   "description": "Delete multiple git branches via a single interface",
   "main": "index.js",
   "scripts": {
-    "gbrdm": "node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gbdm": "node ./index.js"
   },
   "keywords": [
     "git",
     "node",
     "cli"
   ],
-  "author": "Nate Geslin",
+  "author": "Nate Geslin, teamtomkins23@gmail.com",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.3.0",

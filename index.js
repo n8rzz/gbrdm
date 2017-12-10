@@ -13,7 +13,6 @@ exec('git branch', (err, stdout, stderr) => {
 
 function extractBranchNames(stdout) {
     const branchList = extractBranchList(stdout);
-    console.log('+++', branchList);
 
     if (branchList.length === 0) {
         console.log(chalk.red('No non-reserved branches were found to remove.'));
@@ -29,7 +28,7 @@ function createCheckboxListForBranchList(branchList) {
         {
             name: 'branchesToDelete',
             type: 'checkbox',
-            message: 'Select the branches you would like to delete (use the spacebar to select)',
+            message: 'Select branches to delete',
             choices: branchList
         }
     ];
