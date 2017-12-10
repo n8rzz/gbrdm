@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Delete multiple git branches via a single interface",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": "./bin/gbdm.js",
   "scripts": {
     "gbdm": "node ./index.js"
   },
