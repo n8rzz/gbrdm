@@ -14,7 +14,7 @@ npm install -g gbrdm
 
 Navigate to a directory that contains a `.git` directory.
 ```
-gdbm
+gbrdm
 ```
 Select the branch(es) you'd like to remove
 
