@@ -7,7 +7,7 @@ Provides a CLI interface for deleting multiple local branches at the same time.
 ## Installation
 
 ```
-npm install -g gbdm
+npm install -g gbrdm
 ```
 
 ## Usage
