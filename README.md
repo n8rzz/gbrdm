@@ -1,13 +1,13 @@
-# GBDM
+# GBRDM
 
-**G**it **B**ranch **D**elete **M**ultiple.
+**G**it **Br**anch **D**elete **M**ultiple.
 
 Provides a CLI interface for deleting multiple local branches at the same time.
 
 ## Installation
 
 ```
-npm install -g gbdm
+npm install -g gbrdm
 ```
 
 ## Usage

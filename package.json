@@ -1,6 +1,6 @@
 {
-  "name": "git-branch-delete-multiple",
-  "version": "1.0.0",
+  "name": "gbrdm",
+  "version": "1.1.0",
   "description": "Delete multiple git branches via a single interface",
   "main": "index.js",
   "preferGlobal": true,
