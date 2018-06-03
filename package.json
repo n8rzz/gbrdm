@@ -1,12 +1,12 @@
 {
   "name": "gbrdm",
   "version": "1.3.0",
-  "description": "Delete multiple git branches via a single interface",
+  "description": "Delete multiple git branches via a single CLI interface",
   "main": "index.js",
   "preferGlobal": true,
-  "bin": "./bin/gbdm.js",
+  "bin": "./bin/gbrdm.js",
   "scripts": {
-    "gbdm": "node ./index.js"
+    "gbrdm": "node ./index.js"
   },
   "keywords": [
     "git",
@@ -15,10 +15,11 @@
   ],
   "author": "Nate Geslin, teamtomkins23@gmail.com",
   "repository": {
-    "url": "https://github.com/n8rzz/gbdm"
+    "url": "https://github.com/n8rzz/gbrdm"
   },
   "license": "MIT",
   "dependencies": {
+    "@n8rzz/branches": "^1.0.0",
     "chalk": "^2.3.0",
     "inquirer": "^4.0.1"
   }
