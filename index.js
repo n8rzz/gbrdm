@@ -2,10 +2,10 @@ const { exec } = require('child_process');
 const { prompt } = require('inquirer');
 const util = require("util");
 const execProm = util.promisify(exec);
-const chalk = require('chalk');
 const branches = require('@n8rzz/branches');
+const BranchCollection = require('./branch.collection.js');
 
-async function getBranches(repo = 'n8rzz/gbrdm') {
+async function getRemoteBranches(repo = 'n8rzz/gbrdm') {
     try {
         const { stdout } = await execProm(`gh api repos/${repo}/branches`);
         const branches = JSON.parse(stdout);
@@ -16,34 +16,35 @@ async function getBranches(repo = 'n8rzz/gbrdm') {
     }
 }
 
-function _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList) {
-    const transformedBranchList = branchList.reduce((sum, branchName) => {
-        const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
+// function _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList) {
+//     const transformedBranchList = branchList.reduce((sum, branchName) => {
+//         const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
 
-        if (!foundRemoteBranch) {
-            return [
-                ...sum,
-                ` ${chalk.yellow('●')} ${branchName}`
-            ];
-        }
+//         if (!foundRemoteBranch) {
+//             return [
+//                 ...sum,
+//                 ` ${chalk.yellow('●')} ${branchName}`
+//             ];
+//         }
 
-        return [
-            ...sum,
-            ` ${chalk.green('●')} ${branchName}`
-        ];
-    }, []);
+//         return [
+//             ...sum,
+//             ` ${chalk.green('●')} ${branchName}`
+//         ];
+//     }, []);
 
-    return transformedBranchList;
-}
+//     return transformedBranchList;
+// }
 
 function _buildCheckboxList(branchList, remoteBranchList) {
-    const branchListWithRemoteAnnotations = _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList);
+    // const branchCollection = _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList);
+    const branchCollection = new BranchCollection(branchList, remoteBranchList);
     const questions = [
         {
             name: 'branchesToDelete',
             type: 'checkbox',
             message: 'Select branches to delete',
-            choices: branchListWithRemoteAnnotations
+            choices: branchCollection.itemsForDisplay,
         }
     ];
 
@@ -93,7 +94,7 @@ function _deleteSingleBranch(branchName) {
 
 
 (async function () {
-    const remoteBranchList = await getBranches();
+    const remoteBranchList = await getRemoteBranches();
     
     return branches().then((branchList) => _buildCheckboxList(branchList, remoteBranchList));
 })();
