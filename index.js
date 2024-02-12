@@ -1,15 +1,52 @@
 const { exec } = require('child_process');
 const { prompt } = require('inquirer');
+const util = require("util");
+const execProm = util.promisify(exec);
 const chalk = require('chalk');
 const branches = require('@n8rzz/branches');
 
-function _buildCheckboxList(branchList) {
+async function getBranches(repo = 'n8rzz/gbrdm') {
+    try {
+        const { stdout } = await execProm(`gh api repos/${repo}/branches`);
+        const branches = JSON.parse(stdout);
+
+        return branches
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList) {
+    // console.log('+++', branchList, remoteBranchList);
+
+    const transformedBranchList = branchList.reduce((sum, branchName) => {
+        const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
+
+        if (!foundRemoteBranch) {
+            return [...sum, branchName];
+        }
+
+        console.log('--- foundRemoteBranch ', foundRemoteBranch);
+
+        return [
+            ...sum,
+            `${branchName} - ${chalk.green('o')}`
+        ];
+    }, []);
+
+    console.log('+++', transformedBranchList);
+
+    return transformedBranchList;
+}
+
+function _buildCheckboxList(branchList, remoteBranchList) {
+    const branchListWithRemoteAnnotations = _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList);
     const questions = [
         {
             name: 'branchesToDelete',
             type: 'checkbox',
             message: 'Select branches to delete',
-            choices: branchList
+            choices: branchListWithRemoteAnnotations
         }
     ];
 
@@ -26,7 +63,7 @@ function _confirmBranchesToDelete(branchList) {
         message: `Are you sure you want to delete these branches: ${branchList.join(', ')}?`
     }).then((answers) => {
         if (!answers.confirm) {
-            console.log(chalk.red('Aborting delete.  Whew!'));
+            console.log(chalk.red('Aborting delete. Whew! No branches were deleted'));
 
             return;
         }
@@ -58,6 +95,8 @@ function _deleteSingleBranch(branchName) {
 }
 
 
-(function () {
-    return branches().then((branchList) => _buildCheckboxList(branchList));
+(async function () {
+    const remoteBranchList = await getBranches();
+    
+    return branches().then((branchList) => _buildCheckboxList(branchList, remoteBranchList));
 })();
