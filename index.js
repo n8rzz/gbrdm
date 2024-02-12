@@ -17,24 +17,21 @@ async function getBranches(repo = 'n8rzz/gbrdm') {
 }
 
 function _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList) {
-    // console.log('+++', branchList, remoteBranchList);
-
     const transformedBranchList = branchList.reduce((sum, branchName) => {
         const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
 
         if (!foundRemoteBranch) {
-            return [...sum, branchName];
+            return [
+                ...sum,
+                ` ${chalk.yellow('●')} ${branchName}`
+            ];
         }
-
-        console.log('--- foundRemoteBranch ', foundRemoteBranch);
 
         return [
             ...sum,
-            `${branchName} - ${chalk.green('o')}`
+            ` ${chalk.green('●')} ${branchName}`
         ];
     }, []);
-
-    console.log('+++', transformedBranchList);
 
     return transformedBranchList;
 }
