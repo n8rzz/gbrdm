@@ -16,28 +16,7 @@ async function getRemoteBranches(repo = 'n8rzz/gbrdm') {
     }
 }
 
-// function _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList) {
-//     const transformedBranchList = branchList.reduce((sum, branchName) => {
-//         const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
-
-//         if (!foundRemoteBranch) {
-//             return [
-//                 ...sum,
-//                 ` ${chalk.yellow('●')} ${branchName}`
-//             ];
-//         }
-
-//         return [
-//             ...sum,
-//             ` ${chalk.green('●')} ${branchName}`
-//         ];
-//     }, []);
-
-//     return transformedBranchList;
-// }
-
 function _buildCheckboxList(branchList, remoteBranchList) {
-    // const branchCollection = _buildBranchListWithRemoteAnnotations(branchList, remoteBranchList);
     const branchCollection = new BranchCollection(branchList, remoteBranchList);
     const questions = [
         {
@@ -50,15 +29,16 @@ function _buildCheckboxList(branchList, remoteBranchList) {
 
     prompt(questions)
         .then((answers) => {
-            _confirmBranchesToDelete(answers.branchesToDelete);
+            branchCollection.registerItemsToDelete(answers.branchesToDelete);
+            _confirmBranchesToDelete(branchCollection);
         });
 }
 
-function _confirmBranchesToDelete(branchList) {
+function _confirmBranchesToDelete(branchCollection) {
     prompt({
         name: 'confirm',
         type: 'confirm',
-        message: `Are you sure you want to delete these branches: ${branchList.join(', ')}?`
+        message: `Are you sure you want to delete these branches: ${branchCollection.deletableItemsForDisplay}?`
     }).then((answers) => {
         if (!answers.confirm) {
             console.log(chalk.red('Aborting delete. Whew! No branches were deleted'));
