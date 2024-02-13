@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const { prompt } = require('inquirer');
+const chalk = require('chalk');
 const util = require("util");
 const execProm = util.promisify(exec);
 const branches = require('@n8rzz/branches');
@@ -38,7 +39,7 @@ function _confirmBranchesToDelete(branchCollection) {
     prompt({
         name: 'confirm',
         type: 'confirm',
-        message: `Are you sure you want to delete these branches: ${branchCollection.deletableItemsForDisplay}?`
+        message: `Are you sure you want to delete these branches: ${branchCollection.itemsToDelete}?`
     }).then((answers) => {
         if (!answers.confirm) {
             console.log(chalk.red('Aborting delete. Whew! No branches were deleted'));
@@ -46,11 +47,12 @@ function _confirmBranchesToDelete(branchCollection) {
             return;
         }
 
-        _deleteBranchList(branchList);
+        _deleteBranchList(branchCollection.itemsToDelete);
     });
 }
 
 function _deleteBranchList(branchList) {
+    console.log('### _deleteBranchList', branchList);
     for (let i = 0; i < branchList.length; i++) {
         const branchName = branchList[i];
 

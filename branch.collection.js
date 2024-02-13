@@ -10,6 +10,10 @@ class BranchCollection {
         return this._items.map((model) => model.display)
     }
 
+    get itemsToDelete() {
+        return this._itemsToRemove.map((item) => item.name);
+    }
+
     constructor(branchList, remoteBranchList) {
         this._init(branchList, remoteBranchList);
         this._itemsToRemove = [];

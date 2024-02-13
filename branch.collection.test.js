@@ -35,8 +35,8 @@ describe('BranchCollection', () => {
         });
     });
 
-    describe('.registerItemsToDelete', () => {
-        describe('when passed a single branche', () => {
+    describe('.registerItemsToDelete()', () => {
+        describe('when passed a single branch', () => {
             test('Should return a single string', () => {
                 const collection = new BranchCollection(branchListMock, remoteBranchListMock);
                 const branchesToRemove = [' \x1B[32m●\x1B[39m foo']
@@ -60,4 +60,16 @@ describe('BranchCollection', () => {
             });
         });
     });
+
+    describe('#itemsToDelte', () => {   
+        test('Should return an array of branch names', () => {
+            const collection = new BranchCollection(branchListMock, remoteBranchListMock);
+            const branchesToRemove = [' \x1B[32m●\x1B[39m foo', ' \x1B[32m●\x1B[39m bar']
+            const expectedResult = ['foo', 'bar'];
+            
+            collection.registerItemsToDelete(branchesToRemove);
+
+            expect(collection.itemsToDelete).toEqual(expectedResult);
+        });
+    })
 });
