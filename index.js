@@ -5,11 +5,12 @@ const util = require("util");
 const argv = require('minimist')(process.argv.slice(2));
 const branches = require('@n8rzz/branches');
 const BranchCollection = require('./branch.collection.js');
+const { extractOwnerAndRepositoryFromRepo } = require('./git.utils.js');
 const execProm = util.promisify(exec);
 
-async function _getRemoteBranches(repo = 'n8rzz/gbrdm') {
+async function _getRemoteBranches(remoteOwner, remoteName) {
     try {
-        const { stdout } = await execProm(`gh api repos/${repo}/branches`);
+        const { stdout } = await execProm(`gh api repos/${remoteOwner}/${remoteName}/branches`);
         const branches = JSON.parse(stdout);
 
         return branches
@@ -58,7 +59,6 @@ function _confirmBranchesToDelete(branchCollection) {
 }
 
 function _deleteBranchList(branchList) {
-    console.log('### _deleteBranchList', branchList);
     for (let i = 0; i < branchList.length; i++) {
         const branchName = branchList[i];
 
@@ -82,7 +82,8 @@ function _deleteSingleBranch(branchName) {
 
 
 (async function () {
-    const remoteBranchList = await _getRemoteBranches();
+    const remote = await extractOwnerAndRepositoryFromRepo();
+    const remoteBranchList = await _getRemoteBranches(remote.owner, remote.name);
     
     return branches().then((branchList) => _buildInitialView(branchList, remoteBranchList, argv['-r']));
 })();

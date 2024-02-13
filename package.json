@@ -23,6 +23,7 @@
   "dependencies": {
     "@n8rzz/branches": "^1.0.0",
     "chalk": "^2.3.0",
+    "git-url-parse": "^14.0.0",
     "inquirer": "^4.0.1",
     "minimist": "^1.2.8"
   },
