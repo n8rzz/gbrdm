@@ -14,8 +14,8 @@ class BranchCollection {
         return this._itemsToRemove.map((item) => item.name);
     }
 
-    constructor(branchList, remoteBranchList) {
-        this._init(branchList, remoteBranchList);
+    constructor(branchList, remoteBranchList, config) {
+        this._init(branchList, remoteBranchList, config);
         this._itemsToRemove = [];
     }
 
@@ -25,10 +25,15 @@ class BranchCollection {
         });
     }
 
-    _init(branchList, remoteBranchList) {
+    _init(branchList, remoteBranchList, config) {
         this._items = branchList.reduce((sum, branchName) => {
             const foundRemoteBranch = remoteBranchList.filter((branch) => branch.name === branchName)[0];
-            const display = !foundRemoteBranch ? ` ${chalk.yellow('●')} ${branchName}` : ` ${chalk.green('●')} ${branchName}`
+            let display = branchName;
+
+            if (config.isUsingRemote) {
+                display = !foundRemoteBranch ? ` ${chalk.yellow('●')} ${branchName}` : ` ${chalk.green('●')} ${branchName}`
+            }
+
             const model = new BranchModel(branchName, display, foundRemoteBranch);
 
             return [

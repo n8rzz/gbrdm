@@ -2,11 +2,12 @@ const { exec } = require('child_process');
 const { prompt } = require('inquirer');
 const chalk = require('chalk');
 const util = require("util");
-const execProm = util.promisify(exec);
+const argv = require('minimist')(process.argv.slice(2));
 const branches = require('@n8rzz/branches');
 const BranchCollection = require('./branch.collection.js');
+const execProm = util.promisify(exec);
 
-async function getRemoteBranches(repo = 'n8rzz/gbrdm') {
+async function _getRemoteBranches(repo = 'n8rzz/gbrdm') {
     try {
         const { stdout } = await execProm(`gh api repos/${repo}/branches`);
         const branches = JSON.parse(stdout);
@@ -17,8 +18,13 @@ async function getRemoteBranches(repo = 'n8rzz/gbrdm') {
     }
 }
 
-function _buildCheckboxList(branchList, remoteBranchList) {
-    const branchCollection = new BranchCollection(branchList, remoteBranchList);
+/**
+ * 
+ * @param {BranchModel[]} branchList 
+ * @param {*} remoteBranchList 
+ */
+function _buildInitialView(branchList, remoteBranchList, isUsingRemote) {
+    const branchCollection = new BranchCollection(branchList, remoteBranchList, { isUsingRemote });
     const questions = [
         {
             name: 'branchesToDelete',
@@ -76,7 +82,7 @@ function _deleteSingleBranch(branchName) {
 
 
 (async function () {
-    const remoteBranchList = await getRemoteBranches();
+    const remoteBranchList = await _getRemoteBranches();
     
-    return branches().then((branchList) => _buildCheckboxList(branchList, remoteBranchList));
+    return branches().then((branchList) => _buildInitialView(branchList, remoteBranchList, argv['-r']));
 })();

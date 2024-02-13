@@ -23,7 +23,8 @@
   "dependencies": {
     "@n8rzz/branches": "^1.0.0",
     "chalk": "^2.3.0",
-    "inquirer": "^4.0.1"
+    "inquirer": "^4.0.1",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "jest": "^29.7.0"
